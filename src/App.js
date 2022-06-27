@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+const pokeContainer = document.querySelector("#container");
+const numOfPokemon = 12;
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+function createPokeCard(pokemon) {
+  const pokeCard = document.createElement("section");
+  pokeCard.classList.add("pokemon");
+  pokeContainer.append(pokeCard);
+  pokeCard.innerHTML = `
+    <div class="img-container">
+    <img src="${pokemon.data.sprites.front_shiny}"
+    alt="${pokemon.data.name}">
     </div>
-  );
+    <h3 class="name">${pokemon.data.name.toUpperCase()}
+    <h3>
+   
+    `;
+}
+async function getPokemonData(id) {
+  const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+  const pokemonData = await axios.get(url);
+  console.log(pokemonData);
+  console.log(pokemonData.data.sprites.front_shiny);
+  console.log(pokemonData.data.name);
+  createPokeCard(pokemonData);
 }
 
-export default App;
+
+async function getPokemon() {
+  for (i = 1; i <= numOfPokemon; i++) {
+    console.log(i);
+    await getPokemonData(i);
+  }
+}
+getPokemon();
